@@ -12,6 +12,7 @@ export function DatabaseFixPanel() {
   // Check if all required tables exist and are accessible
   useEffect(() => {
     const checkDatabaseTables = async () => {
+      console.log('🔍 DatabaseFixPanel: Starting database connectivity check...');
       setIsChecking(true);
 
       const requiredTables = [
