@@ -51,10 +51,11 @@ export function DatabaseFixPanel() {
           .map((result, index) => requiredTables[index]);
 
         if (failedTables.length > 0) {
-          console.warn('Failed tables:', failedTables);
+          console.warn('❌ DatabaseFixPanel: Failed tables detected:', failedTables);
+          console.warn('🔧 DatabaseFixPanel: Showing setup panel due to database issues');
           setShowPanel(true); // Only show if there are actual issues
         } else {
-          console.log('✅ All database tables are accessible');
+          console.log('✅ DatabaseFixPanel: All database tables are accessible - panel hidden');
           setShowPanel(false); // Hide panel if everything is working
         }
 
