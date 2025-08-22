@@ -1,9 +1,9 @@
 import { ReactNode, useEffect, useState } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Database, RefreshCw, CheckCircle, LogOut } from "lucide-react";
+import { Database, RefreshCw, CheckCircle, LogOut, User } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
-import { useAdminSession } from "@/hooks/use-admin-session";
+import { useSupabaseAdminAuth } from "@/hooks/use-supabase-admin-auth";
 import { AdminLogin } from "./AdminLogin";
 
 interface AdminGuardProps {
@@ -13,13 +13,7 @@ interface AdminGuardProps {
 export function AdminGuard({ children }: AdminGuardProps) {
   const [isConnected, setIsConnected] = useState<boolean | null>(null);
   const [isChecking, setIsChecking] = useState(false);
-  const { isAdminAuthenticated, logoutAdmin, setIsAdminRoute } = useAdminSession();
-
-  // Set admin route flag
-  useEffect(() => {
-    setIsAdminRoute(true);
-    return () => setIsAdminRoute(false);
-  }, [setIsAdminRoute]);
+  const { isAdminAuthenticated, isLoading, signOut, user } = useSupabaseAdminAuth();
 
   const checkConnection = async () => {
     setIsChecking(true);
