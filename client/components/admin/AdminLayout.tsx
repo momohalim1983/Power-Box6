@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { NavLink, Outlet } from "react-router-dom";
 import { AdminGuard } from "./AdminGuard";
+import { useSupabaseAdminAuth } from "@/hooks/use-supabase-admin-auth";
 import {
   LayoutDashboard,
   Megaphone,
@@ -16,6 +17,10 @@ import {
   Settings,
   Home,
   ChevronRight,
+  LogOut,
+  Shield,
+  Clock,
+  User,
 } from "lucide-react";
 
 const adminSections = [
@@ -92,6 +97,8 @@ const adminSections = [
 ];
 
 export function AdminLayout() {
+  const { signOut, user } = useSupabaseAdminAuth();
+
   return (
     <AdminGuard>
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
@@ -106,12 +113,23 @@ export function AdminLayout() {
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
                   Snack Box Admin
                 </h1>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 flex items-center gap-2">
+                  <Shield className="w-3 h-3 text-green-600" />
                   Content Management System
+                  <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full flex items-center gap-1">
+                    <User className="w-3 h-3" />
+                    {user?.email}
+                  </span>
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
+              {/* User Info */}
+              <div className="hidden md:flex items-center gap-2 text-xs text-gray-500 bg-gray-100 px-3 py-1.5 rounded-lg">
+                <Shield className="w-3 h-3 text-green-600" />
+                <span className="text-gray-700 font-medium">{user?.email}</span>
+              </div>
+
               <Button
                 variant="outline"
                 size="sm"
@@ -120,6 +138,16 @@ export function AdminLayout() {
               >
                 <Home className="w-4 h-4" />
                 View Site
+              </Button>
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={signOut}
+                className="flex items-center gap-2 text-red-600 hover:text-red-700 hover:bg-red-50"
+              >
+                <LogOut className="w-4 h-4" />
+                Sign Out
               </Button>
             </div>
           </div>
@@ -182,7 +210,16 @@ export function AdminLayout() {
 
               {/* Footer in Sidebar */}
               <div className="mt-8 pt-6 border-t border-gray-200">
-                <div className="text-xs text-gray-500 text-center">
+                <div className="text-xs text-gray-500 text-center space-y-2">
+                  <div className="flex items-center justify-center gap-1">
+                    <Shield className="w-3 h-3 text-green-600" />
+                    <span className="text-green-600 font-medium">
+                      Supabase Auth
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-600 truncate px-2">
+                    {user?.email}
+                  </p>
                   <p>Snack Box CMS</p>
                   <p className="mt-1">v1.0.0</p>
                 </div>

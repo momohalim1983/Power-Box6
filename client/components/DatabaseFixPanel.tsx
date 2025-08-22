@@ -1,26 +1,101 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Copy, Database, ExternalLink } from "lucide-react";
+import { supabase } from "@/lib/supabaseClient";
 
 export function DatabaseFixPanel() {
-  const [showPanel, setShowPanel] = useState(true);
+  const [showPanel, setShowPanel] = useState(false); // Default to false, only show if there's an actual problem
   const [copied, setCopied] = useState(false);
+  const [isChecking, setIsChecking] = useState(true);
 
+  // Check if all required tables exist and are accessible
+  useEffect(() => {
+    const checkDatabaseTables = async () => {
+      console.log(
+        "🔍 DatabaseFixPanel: Starting database connectivity check...",
+      );
+      setIsChecking(true);
+
+      const requiredTables = [
+        "hero_section",
+        "why_choose_section",
+        "product_gallery",
+        "trust_section",
+        "customer_reviews",
+        "offer_pricing",
+        "footer",
+        "seo_settings",
+        "product_popup",
+        "exit_intent_popup",
+      ];
+
+      try {
+        // Test connectivity and table access by trying to read from each table
+        const tableChecks = await Promise.allSettled(
+          requiredTables.map(async (table) => {
+            const { data, error } = await supabase
+              .from(table)
+              .select("id")
+              .limit(1);
+
+            if (error) {
+              console.warn(`Table ${table} check failed:`, error);
+              throw new Error(
+                `Table ${table} not accessible: ${error.message}`,
+              );
+            }
+
+            return { table, accessible: true };
+          }),
+        );
+
+        // Check if any tables failed
+        const failedTables = tableChecks
+          .filter((result) => result.status === "rejected")
+          .map((result, index) => requiredTables[index]);
+
+        if (failedTables.length > 0) {
+          console.warn(
+            "❌ DatabaseFixPanel: Failed tables detected:",
+            failedTables,
+          );
+          console.warn(
+            "🔧 DatabaseFixPanel: Showing setup panel due to database issues",
+          );
+          setShowPanel(true); // Only show if there are actual issues
+        } else {
+          console.log(
+            "✅ DatabaseFixPanel: All database tables are accessible - panel hidden",
+          );
+          setShowPanel(false); // Hide panel if everything is working
+        }
+      } catch (error) {
+        console.error(
+          "❌ DatabaseFixPanel: Database connectivity check failed:",
+          error,
+        );
+        console.warn(
+          "🔧 DatabaseFixPanel: Showing setup panel due to connectivity error",
+        );
+        setShowPanel(true); // Show panel if there's a connectivity issue
+      } finally {
+        console.log("✅ DatabaseFixPanel: Database check completed");
+        setIsChecking(false);
+      }
+    };
+
+    checkDatabaseTables();
+  }, []);
+
+  // Don't render anything while checking
+  if (isChecking) {
+    return null;
+  }
+
+  // Don't render anything if no issues detected
   if (!showPanel) {
-    return (
-      <div className="fixed bottom-4 left-4 z-50">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setShowPanel(true)}
-          className="bg-red-50 border-red-200 text-red-700"
-        >
-          <Database className="h-3 w-3 mr-1" />
-          Fix DB Errors
-        </Button>
-      </div>
-    );
+    return null;
   }
 
   const sqlScript = `-- QUICK FIX: Run this in Supabase SQL Editor
@@ -95,7 +170,7 @@ SELECT 'SUCCESS: All tables created! Refresh your website.' as result;`;
         <AlertDescription>
           <div className="flex items-center justify-between mb-2">
             <span className="font-semibold text-red-800">
-              Database Setup Required
+              Database Issue Detected
             </span>
             <Button
               variant="outline"
@@ -108,7 +183,10 @@ SELECT 'SUCCESS: All tables created! Refresh your website.' as result;`;
           </div>
 
           <div className="text-red-700 text-sm space-y-3">
-            <div>Your website needs database tables. Follow these steps:</div>
+            <div>
+              Some database tables are missing or inaccessible. Follow these
+              steps to fix:
+            </div>
 
             <div className="bg-white rounded p-2 border">
               <div className="font-medium text-xs mb-1">
@@ -148,8 +226,8 @@ SELECT 'SUCCESS: All tables created! Refresh your website.' as result;`;
             </div>
 
             <div className="text-xs text-green-600 bg-green-50 p-2 rounded border">
-              ✅ After running: All errors will disappear and your site will
-              work!
+              ✅ After running: Database issues will be resolved and this alert
+              will disappear!
             </div>
           </div>
         </AlertDescription>

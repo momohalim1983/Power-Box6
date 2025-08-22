@@ -1,8 +1,10 @@
 import { ReactNode, useEffect, useState } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Database, RefreshCw, CheckCircle } from "lucide-react";
+import { Database, RefreshCw, CheckCircle, LogOut, User } from "lucide-react";
 import { supabase } from "@/lib/supabaseClient";
+import { useSupabaseAdminAuth } from "@/hooks/use-supabase-admin-auth";
+import { AdminLogin } from "./AdminLogin";
 
 interface AdminGuardProps {
   children: ReactNode;
@@ -11,6 +13,8 @@ interface AdminGuardProps {
 export function AdminGuard({ children }: AdminGuardProps) {
   const [isConnected, setIsConnected] = useState<boolean | null>(null);
   const [isChecking, setIsChecking] = useState(false);
+  const { isAdminAuthenticated, isLoading, signOut, user } =
+    useSupabaseAdminAuth();
 
   const checkConnection = async () => {
     setIsChecking(true);
@@ -35,7 +39,24 @@ export function AdminGuard({ children }: AdminGuardProps) {
     checkConnection();
   }, []);
 
-  // Always render the admin panel, but show connection status
+  // Show loading screen while checking authentication
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
+          <p className="text-gray-600">Checking authentication...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show login screen if not authenticated
+  if (!isAdminAuthenticated) {
+    return <AdminLogin />;
+  }
+
+  // Show admin panel if authenticated
   return (
     <div className="relative">
       {/* Connection Status Banner */}
@@ -49,19 +70,36 @@ export function AdminGuard({ children }: AdminGuardProps) {
                 cached data.
               </span>
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={checkConnection}
-              disabled={isChecking}
-              className="h-8"
-            >
-              {isChecking ? (
-                <RefreshCw className="h-3 w-3 animate-spin" />
-              ) : (
-                "Retry Connection"
-              )}
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={checkConnection}
+                disabled={isChecking}
+                className="h-8"
+              >
+                {isChecking ? (
+                  <RefreshCw className="h-3 w-3 animate-spin" />
+                ) : (
+                  "Retry Connection"
+                )}
+              </Button>
+              <div className="flex items-center gap-2">
+                <div className="text-xs text-yellow-700 bg-yellow-100 px-2 py-1 rounded flex items-center gap-1">
+                  <User className="w-3 h-3" />
+                  {user?.email}
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={signOut}
+                  className="h-8 text-red-600 hover:text-red-700"
+                >
+                  <LogOut className="h-3 w-3 mr-1" />
+                  Logout
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       )}
@@ -69,16 +107,30 @@ export function AdminGuard({ children }: AdminGuardProps) {
       {/* Connection Success Banner */}
       {isConnected === true && (
         <div className="fixed top-0 left-0 right-0 z-40 bg-green-50 border-b border-green-200 p-2">
-          <div className="max-w-7xl mx-auto flex items-center justify-center gap-2">
-            <CheckCircle className="h-4 w-4 text-green-600" />
-            <span className="text-sm text-green-800">
-              Database connected successfully
-            </span>
+          <div className="max-w-7xl mx-auto flex items-center justify-between">
+            <div className="flex items-center justify-center gap-2 flex-1">
+              <CheckCircle className="h-4 w-4 text-green-600" />
+              <span className="text-sm text-green-800">
+                Database connected successfully
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-green-600">{user?.email}</span>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={signOut}
+                className="h-6 text-xs text-green-700 hover:text-red-600"
+              >
+                <LogOut className="h-3 w-3 mr-1" />
+                Logout
+              </Button>
+            </div>
           </div>
         </div>
       )}
 
-      {/* Admin Panel Content - Always Render */}
+      {/* Admin Panel Content - Always Render when authenticated */}
       <div
         className={`${isConnected !== null ? "mt-12" : ""} transition-all duration-300`}
       >

@@ -7,6 +7,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { DataProvider } from "@/providers/DataProvider";
+import { SupabaseAdminAuthProvider } from "@/hooks/use-supabase-admin-auth";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import { AdminLayout } from "./components/admin/AdminLayout";
@@ -25,39 +26,41 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <DataProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter
-          future={{
-            v7_startTransition: true,
-            v7_relativeSplatPath: true,
-          }}
-        >
-          <Routes>
-            <Route path="/" element={<Index />} />
+    <SupabaseAdminAuthProvider>
+      <DataProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter
+            future={{
+              v7_startTransition: true,
+              v7_relativeSplatPath: true,
+            }}
+          >
+            <Routes>
+              <Route path="/" element={<Index />} />
 
-            {/* Admin Routes */}
-            <Route path="/admin" element={<AdminLayout />}>
-              <Route index element={<Dashboard />} />
-              <Route path="hero" element={<Hero />} />
-              <Route path="why-choose" element={<WhyChoose />} />
-              <Route path="walmart" element={<Walmart />} />
-              <Route path="inside-box" element={<InsideBox />} />
-              <Route path="testimonials" element={<Testimonials />} />
-              <Route path="offer-pricing" element={<OfferPricing />} />
-              <Route path="footer" element={<Footer />} />
-              <Route path="seo" element={<SEO />} />
-              <Route path="popups" element={<Popups />} />
-            </Route>
+              {/* Admin Routes */}
+              <Route path="/admin" element={<AdminLayout />}>
+                <Route index element={<Dashboard />} />
+                <Route path="hero" element={<Hero />} />
+                <Route path="why-choose" element={<WhyChoose />} />
+                <Route path="walmart" element={<Walmart />} />
+                <Route path="inside-box" element={<InsideBox />} />
+                <Route path="testimonials" element={<Testimonials />} />
+                <Route path="offer-pricing" element={<OfferPricing />} />
+                <Route path="footer" element={<Footer />} />
+                <Route path="seo" element={<SEO />} />
+                <Route path="popups" element={<Popups />} />
+              </Route>
 
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
-    </DataProvider>
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </DataProvider>
+    </SupabaseAdminAuthProvider>
   </QueryClientProvider>
 );
 
