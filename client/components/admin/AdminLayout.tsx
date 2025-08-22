@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { NavLink, Outlet } from "react-router-dom";
 import { AdminGuard } from "./AdminGuard";
-import { useAdminSession } from "@/hooks/use-admin-session";
+import { useSupabaseAdminAuth } from "@/hooks/use-supabase-admin-auth";
 import {
   LayoutDashboard,
   Megaphone,
@@ -20,6 +20,7 @@ import {
   LogOut,
   Shield,
   Clock,
+  User,
 } from "lucide-react";
 
 const adminSections = [
