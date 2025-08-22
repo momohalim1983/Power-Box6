@@ -3,29 +3,32 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Lock, Shield, Eye, EyeOff } from "lucide-react";
-import { useAdminSession } from "@/hooks/use-admin-session";
+import { Lock, Shield, Eye, EyeOff, Mail } from "lucide-react";
+import { useSupabaseAdminAuth } from "@/hooks/use-supabase-admin-auth";
 
 export function AdminLogin() {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { loginAdmin } = useAdminSession();
+  const { signIn } = useSupabaseAdminAuth();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
 
-    // Simulate loading for better UX
-    await new Promise(resolve => setTimeout(resolve, 800));
+    if (!email || !password) {
+      setError("Please enter both email and password.");
+      setIsLoading(false);
+      return;
+    }
 
-    const success = loginAdmin(password);
-    
-    if (!success) {
-      setError("Invalid admin password. Please try again.");
-      setPassword("");
+    const result = await signIn(email, password);
+
+    if (!result.success) {
+      setError(result.error || "Login failed. Please try again.");
     }
 
     setIsLoading(false);
