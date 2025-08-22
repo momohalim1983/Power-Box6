@@ -61,9 +61,11 @@ export function DatabaseFixPanel() {
         }
 
       } catch (error) {
-        console.error('Database connectivity check failed:', error);
+        console.error('❌ DatabaseFixPanel: Database connectivity check failed:', error);
+        console.warn('🔧 DatabaseFixPanel: Showing setup panel due to connectivity error');
         setShowPanel(true); // Show panel if there's a connectivity issue
       } finally {
+        console.log('✅ DatabaseFixPanel: Database check completed');
         setIsChecking(false);
       }
     };
