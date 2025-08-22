@@ -208,9 +208,14 @@ export function AdminLayout() {
 
               {/* Footer in Sidebar */}
               <div className="mt-8 pt-6 border-t border-gray-200">
-                <div className="text-xs text-gray-500 text-center">
+                <div className="text-xs text-gray-500 text-center space-y-2">
+                  <div className="flex items-center justify-center gap-1">
+                    <Shield className="w-3 h-3 text-green-600" />
+                    <span className="text-green-600 font-medium">Authenticated</span>
+                  </div>
                   <p>Snack Box CMS</p>
                   <p className="mt-1">v1.0.0</p>
+                  <p className="text-xs text-gray-400">Session persisted</p>
                 </div>
               </div>
             </nav>
