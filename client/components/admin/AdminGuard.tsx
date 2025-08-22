@@ -113,15 +113,18 @@ export function AdminGuard({ children }: AdminGuardProps) {
                 Database connected successfully
               </span>
             </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={logoutAdmin}
-              className="h-6 text-xs text-green-700 hover:text-red-600"
-            >
-              <LogOut className="h-3 w-3 mr-1" />
-              Logout
-            </Button>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-green-600">{user?.email}</span>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={signOut}
+                className="h-6 text-xs text-green-700 hover:text-red-600"
+              >
+                <LogOut className="h-3 w-3 mr-1" />
+                Logout
+              </Button>
+            </div>
           </div>
         </div>
       )}
