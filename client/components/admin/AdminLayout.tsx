@@ -116,8 +116,9 @@ export function AdminLayout() {
                 <p className="text-sm text-gray-500 flex items-center gap-2">
                   <Shield className="w-3 h-3 text-green-600" />
                   Content Management System
-                  <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
-                    Authenticated
+                  <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full flex items-center gap-1">
+                    <User className="w-3 h-3" />
+                    {user?.email}
                   </span>
                 </p>
               </div>
