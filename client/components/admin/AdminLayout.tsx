@@ -96,6 +96,8 @@ const adminSections = [
 ];
 
 export function AdminLayout() {
+  const { logoutAdmin, adminToken } = useAdminSession();
+
   return (
     <AdminGuard>
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
@@ -110,12 +112,22 @@ export function AdminLayout() {
                 <h1 className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
                   Snack Box Admin
                 </h1>
-                <p className="text-sm text-gray-500">
+                <p className="text-sm text-gray-500 flex items-center gap-2">
+                  <Shield className="w-3 h-3 text-green-600" />
                   Content Management System
+                  <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
+                    Authenticated
+                  </span>
                 </p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
+              {/* Session Info */}
+              <div className="hidden md:flex items-center gap-2 text-xs text-gray-500 bg-gray-100 px-3 py-1.5 rounded-lg">
+                <Clock className="w-3 h-3" />
+                Session Active
+              </div>
+
               <Button
                 variant="outline"
                 size="sm"
@@ -124,6 +136,16 @@ export function AdminLayout() {
               >
                 <Home className="w-4 h-4" />
                 View Site
+              </Button>
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={logoutAdmin}
+                className="flex items-center gap-2 text-red-600 hover:text-red-700 hover:bg-red-50"
+              >
+                <LogOut className="w-4 h-4" />
+                Logout
               </Button>
             </div>
           </div>
