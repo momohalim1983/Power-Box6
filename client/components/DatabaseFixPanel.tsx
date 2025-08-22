@@ -69,20 +69,14 @@ export function DatabaseFixPanel() {
     checkDatabaseTables();
   }, []);
 
+  // Don't render anything while checking
+  if (isChecking) {
+    return null;
+  }
+
+  // Don't render anything if no issues detected
   if (!showPanel) {
-    return (
-      <div className="fixed bottom-4 left-4 z-50">
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => setShowPanel(true)}
-          className="bg-red-50 border-red-200 text-red-700"
-        >
-          <Database className="h-3 w-3 mr-1" />
-          Fix DB Errors
-        </Button>
-      </div>
-    );
+    return null;
   }
 
   const sqlScript = `-- QUICK FIX: Run this in Supabase SQL Editor
