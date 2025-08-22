@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { NavLink, Outlet } from "react-router-dom";
 import { AdminGuard } from "./AdminGuard";
+import { useAdminSession } from "@/hooks/use-admin-session";
 import {
   LayoutDashboard,
   Megaphone,
@@ -16,6 +17,9 @@ import {
   Settings,
   Home,
   ChevronRight,
+  LogOut,
+  Shield,
+  Clock,
 } from "lucide-react";
 
 const adminSections = [
