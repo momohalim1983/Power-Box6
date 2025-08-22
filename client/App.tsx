@@ -26,7 +26,7 @@ const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <AdminSessionProvider>
+    <SupabaseAdminAuthProvider>
       <DataProvider>
         <TooltipProvider>
           <Toaster />
@@ -60,7 +60,7 @@ const App = () => (
           </BrowserRouter>
         </TooltipProvider>
       </DataProvider>
-    </AdminSessionProvider>
+    </SupabaseAdminAuthProvider>
   </QueryClientProvider>
 );
 
