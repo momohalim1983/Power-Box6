@@ -204,8 +204,7 @@ SELECT 'SUCCESS: All tables created! Refresh your website.' as result;`;
             </div>
 
             <div className="text-xs text-green-600 bg-green-50 p-2 rounded border">
-              ✅ After running: All errors will disappear and your site will
-              work!
+              ✅ After running: Database issues will be resolved and this alert will disappear!
             </div>
           </div>
         </AlertDescription>
