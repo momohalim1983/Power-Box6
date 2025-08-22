@@ -13,18 +13,22 @@ This guide will help you set up the new Supabase-based admin authentication syst
 ## 🚀 Quick Setup (5 minutes)
 
 ### Step 1: Update Environment Variables ✅
+
 **Already done!** The following environment variables have been set:
+
 - `VITE_SUPABASE_URL`: https://mylaafierzsaabrmhcml.supabase.co
 - `VITE_SUPABASE_ANON_KEY`: [Your anon key]
 - `VITE_SUPABASE_SERVICE_ROLE_KEY`: [Your service role key]
 
 ### Step 2: Run Database Setup
+
 1. Go to your **Supabase Dashboard**: https://supabase.com/dashboard
 2. Navigate to **SQL Editor**
 3. Copy and paste the entire content of `supabase-admin-setup.sql`
 4. Click **Run** to execute the SQL
 
 ### Step 3: Create Your First Admin User
+
 1. In Supabase Dashboard, go to **Authentication > Users**
 2. Click **Add user** (or use your app's sign-up if available)
 3. Create a user with:
@@ -34,6 +38,7 @@ This guide will help you set up the new Supabase-based admin authentication syst
 4. Copy the email address
 
 ### Step 4: Grant Admin Access
+
 1. Go back to **SQL Editor** in Supabase
 2. Run this command (replace with your email):
    ```sql
@@ -42,6 +47,7 @@ This guide will help you set up the new Supabase-based admin authentication syst
 3. You should see a success message
 
 ### Step 5: Test Login
+
 1. Navigate to `/admin` on your website
 2. Use the email and password you created
 3. You should be logged in to the admin panel!
@@ -49,24 +55,28 @@ This guide will help you set up the new Supabase-based admin authentication syst
 ## 🔧 Managing Admin Users
 
 ### Add New Admin Users
+
 ```sql
 -- In Supabase SQL Editor
 SELECT public.add_admin_user('new-admin@example.com');
 ```
 
 ### Remove Admin Access
+
 ```sql
 -- In Supabase SQL Editor
 SELECT public.remove_admin_user('admin@example.com');
 ```
 
 ### View All Admin Users
+
 ```sql
 -- In Supabase SQL Editor
 SELECT * FROM public.admin_users WHERE is_active = true;
 ```
 
 ### Change Admin Password
+
 1. Go to **Authentication > Users** in Supabase Dashboard
 2. Find the user and click on them
 3. Click **Reset Password** or **Update Password**
@@ -74,6 +84,7 @@ SELECT * FROM public.admin_users WHERE is_active = true;
 ## 🛡️ Security Features
 
 ### ✅ What's Secure Now
+
 - **Email/Password Authentication**: No more hardcoded passwords
 - **Session Persistence**: Sessions survive page reloads
 - **Role-Based Access**: Only designated admin users can access
@@ -81,6 +92,7 @@ SELECT * FROM public.admin_users WHERE is_active = true;
 - **Automatic Session Management**: Handles login/logout automatically
 
 ### 🔒 Row Level Security (RLS)
+
 - Admin users table is protected with RLS
 - Only service role can manage admin users
 - Users can only read their own admin status
@@ -88,16 +100,19 @@ SELECT * FROM public.admin_users WHERE is_active = true;
 ## 🚨 Important Notes
 
 ### Password Requirements
+
 - Use strong passwords (8+ characters, mixed case, numbers, symbols)
 - Change passwords through Supabase Dashboard only
 - Never hardcode passwords in the application code
 
 ### Email Requirements
+
 - Must be valid email addresses
 - Case-sensitive matching
 - Each email can only be an admin once
 
 ### Session Management
+
 - Sessions persist across browser refreshes
 - Automatic logout after session expires
 - Manual logout available in admin panel
@@ -105,24 +120,29 @@ SELECT * FROM public.admin_users WHERE is_active = true;
 ## 🔍 Troubleshooting
 
 ### "User not found" Error
+
 - **Problem**: Trying to add admin access for non-existent user
 - **Solution**: Create the user in Authentication > Users first
 
 ### "Missing Supabase environment variables" Error
+
 - **Problem**: Environment variables not set correctly
 - **Solution**: Dev server environment variables are already set correctly
 
 ### Cannot Access Admin Panel
+
 - **Problem**: User exists but no admin access
 - **Solution**: Run `SELECT public.add_admin_user('your-email@example.com');`
 
 ### "You do not have admin access" Error
+
 - **Problem**: User authenticated but not in admin_users table
 - **Solution**: Add user to admin_users table using SQL command
 
 ## 📝 Database Schema
 
 ### admin_users Table
+
 ```sql
 CREATE TABLE public.admin_users (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -135,6 +155,7 @@ CREATE TABLE public.admin_users (
 ```
 
 ### Available Functions
+
 - `add_admin_user(email)`: Grant admin access
 - `remove_admin_user(email)`: Revoke admin access
 - `sync_admin_user_email()`: Keep emails in sync

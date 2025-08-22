@@ -13,7 +13,8 @@ interface AdminGuardProps {
 export function AdminGuard({ children }: AdminGuardProps) {
   const [isConnected, setIsConnected] = useState<boolean | null>(null);
   const [isChecking, setIsChecking] = useState(false);
-  const { isAdminAuthenticated, isLoading, signOut, user } = useSupabaseAdminAuth();
+  const { isAdminAuthenticated, isLoading, signOut, user } =
+    useSupabaseAdminAuth();
 
   const checkConnection = async () => {
     setIsChecking(true);

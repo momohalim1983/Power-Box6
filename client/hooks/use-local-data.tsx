@@ -54,7 +54,7 @@ export function useLocalData<T extends Record<string, any>>({
   }, [data, key]);
 
   const updateData = (newData: Partial<T>) => {
-    setData(prev => ({ ...prev, ...newData }));
+    setData((prev) => ({ ...prev, ...newData }));
     setIsLocal(true);
   };
 
@@ -81,7 +81,7 @@ export function useLocalData<T extends Record<string, any>>({
 // Utility function to get all admin data keys
 export const getAdminDataKeys = () => [
   "admin_hero_section",
-  "admin_why_choose_section", 
+  "admin_why_choose_section",
   "admin_product_gallery",
   "admin_trust_section",
   "admin_customer_reviews",
@@ -95,8 +95,8 @@ export const getAdminDataKeys = () => [
 // Utility function to export all admin data
 export const exportAllAdminData = () => {
   const allData: Record<string, any> = {};
-  
-  getAdminDataKeys().forEach(key => {
+
+  getAdminDataKeys().forEach((key) => {
     try {
       const stored = localStorage.getItem(key);
       if (stored) {
@@ -141,7 +141,7 @@ export const clearAllAdminData = () => {
   const cleared = [];
   const failed = [];
 
-  getAdminDataKeys().forEach(key => {
+  getAdminDataKeys().forEach((key) => {
     try {
       localStorage.removeItem(key);
       cleared.push(key);

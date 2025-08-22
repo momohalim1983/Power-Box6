@@ -61,7 +61,10 @@ export function AdminLogin() {
           <CardContent>
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-2">
-                <label htmlFor="email" className="text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="email"
+                  className="text-sm font-medium text-gray-700"
+                >
                   Admin Email
                 </label>
                 <div className="relative">
@@ -80,7 +83,10 @@ export function AdminLogin() {
               </div>
 
               <div className="space-y-2">
-                <label htmlFor="password" className="text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="password"
+                  className="text-sm font-medium text-gray-700"
+                >
                   Password
                 </label>
                 <div className="relative">
@@ -150,7 +156,9 @@ export function AdminLogin() {
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm">
             <div className="flex items-center gap-2 justify-center mb-2">
               <Lock className="w-4 h-4 text-blue-600" />
-              <span className="font-medium text-blue-800">Admin Access Setup</span>
+              <span className="font-medium text-blue-800">
+                Admin Access Setup
+              </span>
             </div>
             <div className="text-blue-700 space-y-1">
               <p>• Admin users must be created in the Supabase Dashboard</p>

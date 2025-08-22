@@ -33,7 +33,7 @@ export function AdminSessionProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const savedSession = localStorage.getItem(ADMIN_SESSION_KEY);
     const savedToken = localStorage.getItem(ADMIN_TOKEN_KEY);
-    
+
     if (savedSession === "true" && savedToken) {
       setIsAdminAuthenticated(true);
       setAdminToken(savedToken);
@@ -58,14 +58,14 @@ export function AdminSessionProvider({ children }: { children: ReactNode }) {
   const loginAdmin = (password: string): boolean => {
     if (password === ADMIN_PASSWORD) {
       const token = `admin_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      
+
       setIsAdminAuthenticated(true);
       setAdminToken(token);
-      
+
       // Persist session
       localStorage.setItem(ADMIN_SESSION_KEY, "true");
       localStorage.setItem(ADMIN_TOKEN_KEY, token);
-      
+
       return true;
     }
     return false;
@@ -74,7 +74,7 @@ export function AdminSessionProvider({ children }: { children: ReactNode }) {
   const logoutAdmin = () => {
     setIsAdminAuthenticated(false);
     setAdminToken(null);
-    
+
     // Clear persisted session
     localStorage.removeItem(ADMIN_SESSION_KEY);
     localStorage.removeItem(ADMIN_TOKEN_KEY);
@@ -99,7 +99,9 @@ export function AdminSessionProvider({ children }: { children: ReactNode }) {
 export function useAdminSession() {
   const context = useContext(AdminSessionContext);
   if (context === undefined) {
-    throw new Error("useAdminSession must be used within an AdminSessionProvider");
+    throw new Error(
+      "useAdminSession must be used within an AdminSessionProvider",
+    );
   }
   return context;
 }
