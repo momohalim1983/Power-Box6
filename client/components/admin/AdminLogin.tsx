@@ -61,8 +61,27 @@ export function AdminLogin() {
           <CardContent>
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-2">
+                <label htmlFor="email" className="text-sm font-medium text-gray-700">
+                  Admin Email
+                </label>
+                <div className="relative">
+                  <Input
+                    id="email"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="Enter your admin email"
+                    className="pl-10 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                    required
+                    disabled={isLoading}
+                  />
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                </div>
+              </div>
+
+              <div className="space-y-2">
                 <label htmlFor="password" className="text-sm font-medium text-gray-700">
-                  Admin Password
+                  Password
                 </label>
                 <div className="relative">
                   <Input
@@ -70,7 +89,7 @@ export function AdminLogin() {
                     type={showPassword ? "text" : "password"}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="Enter admin password"
+                    placeholder="Enter your password"
                     className="pr-10 border-gray-300 focus:border-blue-500 focus:ring-blue-500"
                     required
                     disabled={isLoading}
