@@ -1,11 +1,73 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Copy, Database, ExternalLink } from "lucide-react";
+import { supabase } from "@/lib/supabaseClient";
 
 export function DatabaseFixPanel() {
-  const [showPanel, setShowPanel] = useState(true);
+  const [showPanel, setShowPanel] = useState(false); // Default to false, only show if there's an actual problem
   const [copied, setCopied] = useState(false);
+  const [isChecking, setIsChecking] = useState(true);
+
+  // Check if all required tables exist and are accessible
+  useEffect(() => {
+    const checkDatabaseTables = async () => {
+      setIsChecking(true);
+
+      const requiredTables = [
+        'hero_section',
+        'why_choose_section',
+        'product_gallery',
+        'trust_section',
+        'customer_reviews',
+        'offer_pricing',
+        'footer',
+        'seo_settings',
+        'product_popup',
+        'exit_intent_popup'
+      ];
+
+      try {
+        // Test connectivity and table access by trying to read from each table
+        const tableChecks = await Promise.allSettled(
+          requiredTables.map(async (table) => {
+            const { data, error } = await supabase
+              .from(table)
+              .select('id')
+              .limit(1);
+
+            if (error) {
+              console.warn(`Table ${table} check failed:`, error);
+              throw new Error(`Table ${table} not accessible: ${error.message}`);
+            }
+
+            return { table, accessible: true };
+          })
+        );
+
+        // Check if any tables failed
+        const failedTables = tableChecks
+          .filter(result => result.status === 'rejected')
+          .map((result, index) => requiredTables[index]);
+
+        if (failedTables.length > 0) {
+          console.warn('Failed tables:', failedTables);
+          setShowPanel(true); // Only show if there are actual issues
+        } else {
+          console.log('✅ All database tables are accessible');
+          setShowPanel(false); // Hide panel if everything is working
+        }
+
+      } catch (error) {
+        console.error('Database connectivity check failed:', error);
+        setShowPanel(true); // Show panel if there's a connectivity issue
+      } finally {
+        setIsChecking(false);
+      }
+    };
+
+    checkDatabaseTables();
+  }, []);
 
   if (!showPanel) {
     return (
