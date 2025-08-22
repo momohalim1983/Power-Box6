@@ -124,10 +124,10 @@ export function AdminLayout() {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              {/* Session Info */}
+              {/* User Info */}
               <div className="hidden md:flex items-center gap-2 text-xs text-gray-500 bg-gray-100 px-3 py-1.5 rounded-lg">
-                <Clock className="w-3 h-3" />
-                Session Active
+                <Shield className="w-3 h-3 text-green-600" />
+                <span className="text-gray-700 font-medium">{user?.email}</span>
               </div>
 
               <Button
@@ -143,11 +143,11 @@ export function AdminLayout() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={logoutAdmin}
+                onClick={signOut}
                 className="flex items-center gap-2 text-red-600 hover:text-red-700 hover:bg-red-50"
               >
                 <LogOut className="w-4 h-4" />
-                Logout
+                Sign Out
               </Button>
             </div>
           </div>
