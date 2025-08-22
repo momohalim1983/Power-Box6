@@ -97,7 +97,7 @@ const adminSections = [
 ];
 
 export function AdminLayout() {
-  const { logoutAdmin, adminToken } = useAdminSession();
+  const { signOut, user } = useSupabaseAdminAuth();
 
   return (
     <AdminGuard>
