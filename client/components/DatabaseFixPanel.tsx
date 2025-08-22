@@ -12,20 +12,22 @@ export function DatabaseFixPanel() {
   // Check if all required tables exist and are accessible
   useEffect(() => {
     const checkDatabaseTables = async () => {
-      console.log('🔍 DatabaseFixPanel: Starting database connectivity check...');
+      console.log(
+        "🔍 DatabaseFixPanel: Starting database connectivity check...",
+      );
       setIsChecking(true);
 
       const requiredTables = [
-        'hero_section',
-        'why_choose_section',
-        'product_gallery',
-        'trust_section',
-        'customer_reviews',
-        'offer_pricing',
-        'footer',
-        'seo_settings',
-        'product_popup',
-        'exit_intent_popup'
+        "hero_section",
+        "why_choose_section",
+        "product_gallery",
+        "trust_section",
+        "customer_reviews",
+        "offer_pricing",
+        "footer",
+        "seo_settings",
+        "product_popup",
+        "exit_intent_popup",
       ];
 
       try {
@@ -34,38 +36,51 @@ export function DatabaseFixPanel() {
           requiredTables.map(async (table) => {
             const { data, error } = await supabase
               .from(table)
-              .select('id')
+              .select("id")
               .limit(1);
 
             if (error) {
               console.warn(`Table ${table} check failed:`, error);
-              throw new Error(`Table ${table} not accessible: ${error.message}`);
+              throw new Error(
+                `Table ${table} not accessible: ${error.message}`,
+              );
             }
 
             return { table, accessible: true };
-          })
+          }),
         );
 
         // Check if any tables failed
         const failedTables = tableChecks
-          .filter(result => result.status === 'rejected')
+          .filter((result) => result.status === "rejected")
           .map((result, index) => requiredTables[index]);
 
         if (failedTables.length > 0) {
-          console.warn('❌ DatabaseFixPanel: Failed tables detected:', failedTables);
-          console.warn('🔧 DatabaseFixPanel: Showing setup panel due to database issues');
+          console.warn(
+            "❌ DatabaseFixPanel: Failed tables detected:",
+            failedTables,
+          );
+          console.warn(
+            "🔧 DatabaseFixPanel: Showing setup panel due to database issues",
+          );
           setShowPanel(true); // Only show if there are actual issues
         } else {
-          console.log('✅ DatabaseFixPanel: All database tables are accessible - panel hidden');
+          console.log(
+            "✅ DatabaseFixPanel: All database tables are accessible - panel hidden",
+          );
           setShowPanel(false); // Hide panel if everything is working
         }
-
       } catch (error) {
-        console.error('❌ DatabaseFixPanel: Database connectivity check failed:', error);
-        console.warn('🔧 DatabaseFixPanel: Showing setup panel due to connectivity error');
+        console.error(
+          "❌ DatabaseFixPanel: Database connectivity check failed:",
+          error,
+        );
+        console.warn(
+          "🔧 DatabaseFixPanel: Showing setup panel due to connectivity error",
+        );
         setShowPanel(true); // Show panel if there's a connectivity issue
       } finally {
-        console.log('✅ DatabaseFixPanel: Database check completed');
+        console.log("✅ DatabaseFixPanel: Database check completed");
         setIsChecking(false);
       }
     };
@@ -168,7 +183,10 @@ SELECT 'SUCCESS: All tables created! Refresh your website.' as result;`;
           </div>
 
           <div className="text-red-700 text-sm space-y-3">
-            <div>Some database tables are missing or inaccessible. Follow these steps to fix:</div>
+            <div>
+              Some database tables are missing or inaccessible. Follow these
+              steps to fix:
+            </div>
 
             <div className="bg-white rounded p-2 border">
               <div className="font-medium text-xs mb-1">
@@ -208,7 +226,8 @@ SELECT 'SUCCESS: All tables created! Refresh your website.' as result;`;
             </div>
 
             <div className="text-xs text-green-600 bg-green-50 p-2 rounded border">
-              ✅ After running: Database issues will be resolved and this alert will disappear!
+              ✅ After running: Database issues will be resolved and this alert
+              will disappear!
             </div>
           </div>
         </AlertDescription>

@@ -2,83 +2,89 @@
 // Run this script to verify all tables are accessible
 // Usage: node test-database-connectivity.js
 
-const { createClient } = require('@supabase/supabase-js');
+const { createClient } = require("@supabase/supabase-js");
 
-const supabaseUrl = process.env.VITE_SUPABASE_URL || 'https://mylaafierzsaabrmhcml.supabase.co';
-const supabaseKey = process.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15bGFhZmllcnpzYWFicm1oY21sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU3MjE3NjYsImV4cCI6MjA3MTI5Nzc2Nn0.NieaPGzGiJKc3pMeYUqGEuw5x2_-2tQeV2S0-iPPPtc';
+const supabaseUrl =
+  process.env.VITE_SUPABASE_URL || "https://mylaafierzsaabrmhcml.supabase.co";
+const supabaseKey =
+  process.env.VITE_SUPABASE_ANON_KEY ||
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im15bGFhZmllcnpzYWFicm1oY21sIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU3MjE3NjYsImV4cCI6MjA3MTI5Nzc2Nn0.NieaPGzGiJKc3pMeYUqGEuw5x2_-2tQeV2S0-iPPPtc";
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const requiredTables = [
-  'hero_section',
-  'why_choose_section',
-  'product_gallery',
-  'trust_section',
-  'customer_reviews',
-  'offer_pricing',
-  'footer',
-  'seo_settings',
-  'product_popup',
-  'exit_intent_popup'
+  "hero_section",
+  "why_choose_section",
+  "product_gallery",
+  "trust_section",
+  "customer_reviews",
+  "offer_pricing",
+  "footer",
+  "seo_settings",
+  "product_popup",
+  "exit_intent_popup",
 ];
 
 async function testDatabaseConnectivity() {
-  console.log('🔍 Testing database connectivity...');
-  console.log('📍 Supabase URL:', supabaseUrl);
-  console.log('');
+  console.log("🔍 Testing database connectivity...");
+  console.log("📍 Supabase URL:", supabaseUrl);
+  console.log("");
 
   const results = [];
 
   for (const table of requiredTables) {
     try {
-      const { data, error } = await supabase
-        .from(table)
-        .select('id')
-        .limit(1);
+      const { data, error } = await supabase.from(table).select("id").limit(1);
 
       if (error) {
         results.push({
           table,
-          status: 'ERROR',
+          status: "ERROR",
           message: error.message,
-          code: error.code
+          code: error.code,
         });
       } else {
         results.push({
           table,
-          status: 'OK',
-          message: `Accessible (${data ? data.length : 0} records)`
+          status: "OK",
+          message: `Accessible (${data ? data.length : 0} records)`,
         });
       }
     } catch (error) {
       results.push({
         table,
-        status: 'FAILED',
-        message: error.message
+        status: "FAILED",
+        message: error.message,
       });
     }
   }
 
   // Print results
-  console.log('📊 Database Connectivity Results:');
-  console.log('================================');
-  
+  console.log("📊 Database Connectivity Results:");
+  console.log("================================");
+
   let allOk = true;
-  results.forEach(result => {
-    const icon = result.status === 'OK' ? '✅' : '❌';
-    console.log(`${icon} ${result.table.padEnd(20)} | ${result.status.padEnd(6)} | ${result.message}`);
-    if (result.status !== 'OK') {
+  results.forEach((result) => {
+    const icon = result.status === "OK" ? "✅" : "❌";
+    console.log(
+      `${icon} ${result.table.padEnd(20)} | ${result.status.padEnd(6)} | ${result.message}`,
+    );
+    if (result.status !== "OK") {
       allOk = false;
     }
   });
 
-  console.log('');
+  console.log("");
   if (allOk) {
-    console.log('🎉 SUCCESS: All database tables are accessible!');
-    console.log('✅ The DatabaseFixPanel popup should NOT appear on your website.');
+    console.log("🎉 SUCCESS: All database tables are accessible!");
+    console.log(
+      "✅ The DatabaseFixPanel popup should NOT appear on your website.",
+    );
   } else {
-    console.log('⚠️  WARNING: Some tables have issues.');
-    console.log('❌ The DatabaseFixPanel popup will appear until these are fixed.');
+    console.log("⚠️  WARNING: Some tables have issues.");
+    console.log(
+      "❌ The DatabaseFixPanel popup will appear until these are fixed.",
+    );
   }
 
   return allOk;
@@ -86,10 +92,10 @@ async function testDatabaseConnectivity() {
 
 // Run the test
 testDatabaseConnectivity()
-  .then(success => {
+  .then((success) => {
     process.exit(success ? 0 : 1);
   })
-  .catch(error => {
-    console.error('❌ Test failed with error:', error);
+  .catch((error) => {
+    console.error("❌ Test failed with error:", error);
     process.exit(1);
   });
