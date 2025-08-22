@@ -118,7 +118,7 @@ export function AdminLogin() {
               <Button
                 type="submit"
                 className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white shadow-lg"
-                disabled={isLoading || !password.trim()}
+                disabled={isLoading || !email.trim() || !password.trim()}
               >
                 {isLoading ? (
                   <div className="flex items-center gap-2">
@@ -128,7 +128,7 @@ export function AdminLogin() {
                 ) : (
                   <div className="flex items-center gap-2">
                     <Shield className="w-4 h-4" />
-                    Access Admin Panel
+                    Sign In to Admin Panel
                   </div>
                 )}
               </Button>
@@ -137,7 +137,7 @@ export function AdminLogin() {
             {/* Info Section */}
             <div className="mt-6 pt-4 border-t border-gray-200">
               <div className="text-xs text-gray-500 text-center space-y-1">
-                <p>🔒 Secure authentication required</p>
+                <p>🔒 Supabase authentication required</p>
                 <p>💾 Session will persist across reloads</p>
                 <p>⚡ Real-time data synchronization</p>
               </div>
@@ -145,11 +145,18 @@ export function AdminLogin() {
           </CardContent>
         </Card>
 
-        {/* Development Note */}
+        {/* Instructions */}
         <div className="mt-6 text-center">
-          <div className="inline-flex items-center gap-1 bg-amber-50 text-amber-700 px-3 py-1 rounded-lg text-xs">
-            <Lock className="w-3 h-3" />
-            Demo password: admin123
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm">
+            <div className="flex items-center gap-2 justify-center mb-2">
+              <Lock className="w-4 h-4 text-blue-600" />
+              <span className="font-medium text-blue-800">Admin Access Setup</span>
+            </div>
+            <div className="text-blue-700 space-y-1">
+              <p>• Admin users must be created in the Supabase Dashboard</p>
+              <p>• Email/password authentication via Supabase Auth</p>
+              <p>• Contact your administrator for access credentials</p>
+            </div>
           </div>
         </div>
       </div>
