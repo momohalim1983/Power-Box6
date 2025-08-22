@@ -151,7 +151,7 @@ SELECT 'SUCCESS: All tables created! Refresh your website.' as result;`;
         <AlertDescription>
           <div className="flex items-center justify-between mb-2">
             <span className="font-semibold text-red-800">
-              Database Setup Required
+              Database Issue Detected
             </span>
             <Button
               variant="outline"
@@ -164,7 +164,7 @@ SELECT 'SUCCESS: All tables created! Refresh your website.' as result;`;
           </div>
 
           <div className="text-red-700 text-sm space-y-3">
-            <div>Your website needs database tables. Follow these steps:</div>
+            <div>Some database tables are missing or inaccessible. Follow these steps to fix:</div>
 
             <div className="bg-white rounded p-2 border">
               <div className="font-medium text-xs mb-1">
