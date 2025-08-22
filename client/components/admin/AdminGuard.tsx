@@ -83,15 +83,21 @@ export function AdminGuard({ children }: AdminGuardProps) {
                   "Retry Connection"
                 )}
               </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={logoutAdmin}
-                className="h-8 text-red-600 hover:text-red-700"
-              >
-                <LogOut className="h-3 w-3 mr-1" />
-                Logout
-              </Button>
+              <div className="flex items-center gap-2">
+                <div className="text-xs text-yellow-700 bg-yellow-100 px-2 py-1 rounded flex items-center gap-1">
+                  <User className="w-3 h-3" />
+                  {user?.email}
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={signOut}
+                  className="h-8 text-red-600 hover:text-red-700"
+                >
+                  <LogOut className="h-3 w-3 mr-1" />
+                  Logout
+                </Button>
+              </div>
             </div>
           </div>
         </div>
